@@ -6,14 +6,14 @@
 * @Last modified time: 2016-01-26T23:22:24-05:00
 */
 
-export const TREEBANK_CONTRACTIONS = [
+export const TREEBANK_CONTRACTIONS: RegExp[] = [
   /\b(can)(not)\b/i, /\b(d)('ye)\b/i, /\b(gim)(me)\b/i,
   /\b(gon)(na)\b/i, /\b(got)(ta)\b/i, /\b(lem)(me)\b/i,
   /\b(more)('n)\b/i, /\b(wan)(na) /i, /\ ('t)(is)\b/i,
   /\ ('t)(was)\b/i,
 ];
 
-export const HONORIFICS = [
+export const HONORIFICS: string[] = [
   'jr', 'mr', 'mrs', 'ms', 'dr', 'prof', 'sr', 'sen', 'corp', 'rep', 'gov',
   'atty', 'supt', 'det', 'rev', 'col', 'gen', 'lt', 'cmdr', 'adm', 'capt',
   'sgt', 'cpl', 'maj', 'miss', 'misses', 'mister', 'sir', 'esq', 'mstr', 'phd',
@@ -21,18 +21,18 @@ export const HONORIFICS = [
   'op', 'ord', 'pvt', 'reps', 'res', 'sens', 'sfc', 'surg',
 ];
 
-export const ABBR_COMMON = [
+export const ABBR_COMMON: string[] = [
   'arc', 'al', 'exp', 'rd', 'st', 'dist', 'mt', 'fy', 'pd', 'pl', 'plz', 'tce',
   'llb', 'md', 'bl', 'ma', 'ba', 'lit', 'ex', 'e.g', 'i.e', 'circa', 'ca', 'cca',
   'v.s', 'etc', 'esp', 'ft', 'b.c', 'a.d',
 ];
 
-export const ABBR_ORGANIZATIONS = [
+export const ABBR_ORGANIZATIONS: string[] = [
   'co', 'corp', 'yahoo', 'joomla', 'jeopardy',
   'dept', 'univ', 'assn', 'bros', 'inc', 'ltd',
 ];
 
-export const ABBR_PLACES = [
+export const ABBR_PLACES: string[] = [
   'ala', 'ariz', 'ark', 'cal', 'calif', 'col', 'colo', 'conn', 'del', 'fed',
   'fla', 'fl', 'ga', 'ida', 'ind', 'ia', 'la', 'kan', 'kans', 'ken', 'ky',
   'la', 'md', 'mich', 'minn', 'mont', 'neb', 'nebr', 'nev', 'okla', 'penna',
@@ -41,22 +41,22 @@ export const ABBR_PLACES = [
   'cl', 'ct', 'cres', 'hwy', 'U.S', 'U.S.A', 'E.U', 'N°',
 ];
 
-export const ABBR_TIME = [
+export const ABBR_TIME: string[] = [
   'a.m', 'p.m',
 ];
 
-export const ABBR_DATES = [
+export const ABBR_DATES: string[] = [
   'jan', 'feb', 'mar', 'apr', 'jun', 'jul', 'aug',
   'sep', 'oct', 'nov', 'dec', 'sept', 'sep',
 ];
 
-export const GATE_EXCEPTIONS = [
+export const GATE_EXCEPTIONS: string[] = [
   'ex', 'e.g', 'i.e', 'circa', 'ca', 'cca',
   'v.s', 'esp', 'ft', 'st', 'mt',
   ...HONORIFICS,
 ];
 
-export const GATE_SUBSTITUTIONS = [
+export const GATE_SUBSTITUTIONS: string[] = [
   ...ABBR_COMMON,
   ...ABBR_DATES,
   ...ABBR_ORGANIZATIONS,

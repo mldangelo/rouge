@@ -1,15 +1,4 @@
-<!--
-@Author: Lim Mingjie, Kenneth <Astrianna>
-@Date:   2016-02-28T14:41:51-05:00
-@Email:  me@kenlimmj.com
-@Last modified by:   Astrianna
-@Last modified time: 2016-02-28T15:09:06-05:00
--->
-
-
-
-ROUGE.js
-=====
+# ROUGE.js
 
 A Javascript implementation of the Recall-Oriented Understudy for Gisting Evaluation (ROUGE) evaluation metric for summaries. This package implements the following metrics:
 

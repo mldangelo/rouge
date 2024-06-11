@@ -1,5 +1,4 @@
 /**
-* @flow
 * @license
 * @Author: Lim Mingjie, Kenneth
 * @Date:   2016-01-20T18:56:22-05:00
@@ -31,7 +30,7 @@ import {
  * @param  {string}           input     The sentence to be tokenized
  * @return {Array<string>}              An array of word tokens
  */
-export function treeBankTokenize(input: string): Array<string> {
+export function treeBankTokenize(input: string): string[] {
   if (input.length === 0) return [];
 
   // Does the following things in order of appearance by line:
@@ -94,7 +93,7 @@ export function treeBankTokenize(input: string): Array<string> {
  * @param  {string}         input     The document to be segmented
  * @return {Array<string>}            An array of sentences
  */
-export function sentenceSegment(input: string): Array<string> {
+export function sentenceSegment(input: string): string[] {
   if (input.length === 0) return [];
 
   const abbrvReg = new RegExp('\\b(' + GATE_SUBSTITUTIONS.join('|') + ')[.!?] ?$', 'i');
@@ -199,19 +198,19 @@ export function charIsUpperCase(input: string): boolean {
  *                            A store should implement `has`, `get`, and `set` methods.
  * @return {Function}         A closure of the memoization cache and the original function
  */
-function memoize(func: Function, Store: Function = Map): Function {
+function memoize<T extends (...args: any[]) => any>(func: T, Store: MapConstructor = Map): T {
   return (() => {
-    let cache = new Store();
+    const cache = new Store();
 
-    return (n) => {
+    return ((n: any) => {
       if (cache.has(n)) {
         return cache.get(n);
       } else {
-        let result = func(n);
+        const result = func(n);
         cache.set(n, result);
         return result;
       }
-    };
+    }) as T;
   })();
 }
 
@@ -249,11 +248,11 @@ export const fact = memoize(factRec);
  * @return {Array<string>}                An array of skip bigram strings
  */
 export function skipBigram(
-  tokens: Array<string>
-): Array<string> {
+  tokens: string[]
+): string[] {
   if (tokens.length < 2) throw new RangeError('Input must have at least two words');
 
-  let acc = [];
+  const acc: string[] = [];
   for (let baseIdx = 0; baseIdx < tokens.length - 1; baseIdx++) {
     for (let sweepIdx = baseIdx + 1; sweepIdx < tokens.length; sweepIdx++) {
       acc.push(`${tokens[baseIdx]} ${tokens[sweepIdx]}`);
@@ -275,17 +274,17 @@ export const NGRAM_DEFAULT_OPTS = { start: false, end: false, val: '<S>' };
  * @return {Array<string>}                    An array of n-gram strings
  */
 export function nGram(
-  tokens: Array<string>,
+  tokens: string[],
   n: number = 2,
-  pad: Object = {}
-): Array<string> {
+  pad: { start?: boolean, end?: boolean, val?: string } = {}
+): string[] {
   if (n < 1) throw new RangeError('ngram size cannot be smaller than 1');
 
   if (tokens.length < n) {
     throw new RangeError('ngram size cannot be larger than the number of tokens available');
   }
 
-  if (pad !== {}) {
+  if (Object.keys(pad).length !== 0) {
     const config = Object.assign({}, NGRAM_DEFAULT_OPTS, pad);
 
     // Clone the input token array to avoid mutating the source data
@@ -297,7 +296,7 @@ export function nGram(
     tokens = tempTokens;
   }
 
-  let acc = [];
+  const acc: string[] = [];
   for (let idx = 0; idx < (tokens.length - n + 1); idx++) {
     acc.push(tokens.slice(idx, idx + n).join(' '));
   }
@@ -324,7 +323,7 @@ export function comb2(val: number): number {
  * @param  {Array<number>}   input    Data distribution
  * @return {number}                   The mean of the distribution
  */
-export function arithmeticMean(input: Array<number>): number {
+export function arithmeticMean(input: number[]): number {
   if (input.length < 1) throw new RangeError('Input array must have at least 1 element');
   return input.reduce((x, y) => x + y) / input.length;
 }
@@ -344,10 +343,10 @@ export function arithmeticMean(input: Array<number>): number {
  * @return {number}                    The result computed by applying `test` to the resampled data
  */
 export function jackKnife(
-  cands: Array<string>,
+  cands: string[],
   ref: string,
-  func: ((x: string, y: string) => number),
-  test: ((x: Array<number>) => number) = arithmeticMean
+  func: (x: string, y: string) => number,
+  test: (x: number[]) => number = arithmeticMean
 ): number {
   if (cands.length < 2) {
     throw new RangeError('Candidate array must contain more than one element');
@@ -355,10 +354,10 @@ export function jackKnife(
 
   const pairs = cands.map(c => func(c, ref));
 
-  let acc = [];
+  const acc: number[] = [];
   for (let idx = 0; idx < pairs.length; idx++) {
     // Clone the array and remove one element
-    let leaveOneOut = pairs.slice(0);
+    const leaveOneOut = pairs.slice(0);
     leaveOneOut.splice(idx, 1);
 
     acc.push(Math.max(...leaveOneOut));
@@ -407,7 +406,7 @@ export function fMeasure(
  * @param  {Array<string>}    b     The second array
  * @return {Array<string>}          Elements common to both the first and second array
  */
-export function intersection(a: Array<string>, b: Array<string>): Array<string> {
+export function intersection(a: string[], b: string[]): string[] {
   const test = new Set(a);
   const ref = new Set(b);
 
@@ -427,11 +426,11 @@ export function intersection(a: Array<string>, b: Array<string>): Array<string> 
  * @param  {Array<string>}    b     The second array
  * @return {Array<string>}          The longest common subsequence between the first and second array
  */
-export function lcs(a: Array<string>, b: Array<string>): Array<string> {
+export function lcs(a: string[], b: string[]): string[] {
   if (a.length === 0 || b.length === 0) return [];
 
-  let start = [];
-  let end = [];
+  let start: string[] = [];
+  let end: string[] = [];
 
   let startIdx = 0;
   let aEndIdx = a.length - 1;
@@ -448,8 +447,8 @@ export function lcs(a: Array<string>, b: Array<string>): Array<string> {
     bEndIdx--;
   }
 
-  let trimmedA = a.slice(startIdx, aEndIdx + 1);
-  let trimmedB = b.slice(startIdx, bEndIdx + 1);
+  const trimmedA = a.slice(startIdx, aEndIdx + 1);
+  const trimmedB = b.slice(startIdx, bEndIdx + 1);
 
   for (let bIdx = 0; bIdx < trimmedB.length; bIdx++) {
     for (let aIdx = 0; aIdx < trimmedA.length; aIdx++) {
