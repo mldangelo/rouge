@@ -1,49 +1,57 @@
 # ROUGE.js
 
-A Javascript implementation of the Recall-Oriented Understudy for Gisting Evaluation (ROUGE) evaluation metric for summaries. This package implements the following metrics:
+A JavaScript implementation of the Recall-Oriented Understudy for Gisting Evaluation (ROUGE) evaluation metric for summaries. This package implements the following metrics:
 
 - n-gram (ROUGE-N)
 - Longest Common Subsequence (ROUGE-L)
 - Skip Bigram (ROUGE-S)
 
 ## Rationale
-ROUGE is somewhat a standard metric for evaluating the performance of auto-summarization algorithms. However, with the exception of [MEAD](http://www.summarization.com/mead/) (which is written in Perl. Yes. Perl.), requesting a copy of ROUGE to work with requires one to navigate a barely functional [webpage](http://www.isi.edu/licensed-sw/see/rouge/), fill up [forms](http://www.berouge.com/Pages/DownloadROUGE.aspx), and sign a legal release somewhere along the way while at it. These definitely exist for good reason, but it gets irritating when all one wishes to do is benchmark an algorithm.
 
-Nevertheless, the [paper](http://www.aclweb.org/anthology/W04-1013) describing ROUGE is available for public consumption. The appropriate course of action is then to convert the equations in the paper to a more user-friendly format, which takes the form of the present repository. So there. No more forms. See how life could have been made a lot easier for everyone if we were all willing to stop writing legalese or making people click submit buttons?
+ROUGE is a standard metric for evaluating the performance of auto-summarization algorithms. However, aside from [MEAD](http://www.summarization.com/mead/) (written in Perl), obtaining a copy of ROUGE typically requires navigating a barely functional [webpage](http://www.isi.edu/licensed-sw/see/rouge/), filling out [forms](http://www.berouge.com/Pages/DownloadROUGE.aspx), and signing a legal release. These steps exist for good reasons, but they can be frustrating when all one wants to do is benchmark an algorithm.
+
+Fortunately, the [paper](http://www.aclweb.org/anthology/W04-1013) describing ROUGE is publicly available. This repository translates the equations in the paper into a more user-friendly format. No more forms—just straightforward usage.
 
 ## Quick Start
-This package is available on NPM, like so:
+
+This package is available on NPM:
+
 ```shell
 npm install --save rouge
 ```
 
-To use it, simply require the package:
+To use it, simply import or require the package:
+
 ```javascript
-import 'rouge';                 // ES2015
+import 'rouge'; // ES2015
 
 // OR
 
-var rouge = require('rouge');   // ES5
+const rouge = require('rouge'); // ES5
 ```
 
-A small but growing number of tests exist. To run them:
+To run the tests:
+
 ```shell
 npm test
 ```
-This should give you many lines of colorful text in your CLI. Naturally, you'll need to have [Mocha](https://mochajs.org/) installed, but you knew that already.
 
-*NOTE:* Function test coverage is 100%, but branch coverage numbers look horrible because the current testing implementation has no way of accounting for the additional code injected by [Babel](https://babeljs.io/) when transpiling from ES2015 to ES5. A fix is in the pipeline, but if anyone has anything good, feel free to PR!
+This will display colorful output in your CLI. You'll need [Mocha](https://mochajs.org/) installed.
+
+*NOTE:* Function test coverage is 100%, but branch coverage numbers appear low due to additional code injected by [Babel](https://babeljs.io/) during transpilation from ES2015 to ES5. A fix is in progress, but contributions are welcome!
 
 ## Usage
-Rouge.js provides three functions:
+
+ROUGE.js provides three functions:
 
 - **ROUGE-N**: `rouge.n(cand, ref, opts)`
 - **ROUGE-L**: `rouge.l(cand, ref, opts)`
 - **ROUGE-S**: `rouge.s(cand, ref, opts)`
 
-All functions take in a candidate string, a reference string, and an configuration object specifying additional options. Documentation for the options are provided inline in `lib\rouge.js`. Type signatures are specified and checked using [Flowtype](http://flowtype.org/).
+All functions take a candidate string, a reference string, and a configuration object specifying additional options. Documentation for the options is provided inline in `lib/rouge.js`. Type signatures are specified and checked using [Flowtype](http://flowtype.org/).
 
-Here's an example evaluating ROUGE-L using an averaged-F1 score instead of the DUC-F1:
+Example of evaluating ROUGE-L using an averaged-F1 score instead of the DUC-F1:
+
 ```javascript
 import l as rougeL from 'rouge';
 
@@ -53,9 +61,10 @@ const cand = 'police kill the gunman';
 rougeL(cand, ref, { beta: 0.5 });
 ```
 
-In addition, the main functions rely on a battery of utility functions specified in `lib\utils.js`. These perform a bunch of things like quick evaluation of skip bigrams, string tokenization, sentence segmentation, and set intersections.
+The main functions rely on a set of utility functions specified in `lib/utils.js`. These perform tasks such as evaluating skip bigrams, string tokenization, sentence segmentation, and set intersections.
 
-Here's an example applying jackknife resampling as described in the original paper:
+Example of applying jackknife resampling as described in the original paper:
+
 ```javascript
 import n as rougeN from 'rouge';
 import jackKnife from 'utils';
@@ -79,19 +88,19 @@ jackKnife(cands, ref, rougeN, distMax);
 
 ## Versioning
 
-Development will be maintained under the Semantic Versioning guidelines as much as possible in order to ensure transparency and backwards compatibility.
+Development follows Semantic Versioning guidelines to ensure transparency and backward compatibility.
 
-Releases will be numbered with the following format:
+Releases are numbered with the following format:
 
 `<major>.<minor>.<patch>`
 
 And constructed with the following guidelines:
 
-+ Breaking backward compatibility bumps the major (and resets the minor and patch)
-+ New additions without breaking backward compatibility bump the minor (and resets the patch)
-+ Bug fixes and miscellaneous changes bump the patch
+- Breaking backward compatibility increments the major version (and resets minor and patch versions)
+- New additions without breaking backward compatibility increment the minor version (and reset the patch version)
+- Bug fixes and miscellaneous changes increment the patch version
 
-For more information on SemVer, visit http://semver.org/.
+For more information on SemVer, visit [semver.org](http://semver.org/).
 
 ## Bug Tracking and Feature Requests
 
@@ -101,9 +110,10 @@ Before opening any issue, please search for existing issues and read the [Issue 
 
 ## Contributing
 
-Please submit all pull requests against *-wip branches. All code should pass JSHint/ESLint validation. Note that files in ``/lib`` are written in ES2015 syntax and transpiled to corresponding files in ``/dist`` using Babel. Gulp build pipelines exist and should be used.
+Please submit all pull requests against *-wip branches. All code should pass JSHint/ESLint validation. Note that files in `lib` are written in ES2015 syntax and transpiled to corresponding files in `dist` using Babel. Gulp build pipelines exist and should be used.
 
-The amount of data available for writing tests is unfortunately woefully inadequate. I've tried to be as thorough as possible, but that eliminates neither the possibility of nor existence of errors. The gold standard is the DUC data-set, but that too is form-walled and legal-release-walled, which is infuriating. If you have data in the form of a candidate summary, reference(s), and a verified ROUGE score you do not mind sharing, I would love to add that to the test harness.
+The amount of data available for writing tests is unfortunately inadequate. I've tried to be as thorough as possible, but errors may still exist. The gold standard is the DUC dataset, but it is form-walled and legal-release-walled, which is infuriating. If you have data in the form of a candidate summary, reference(s), and a verified ROUGE score you do not mind sharing, I would love to add it to the test harness.
 
 ## License
+
 MIT
