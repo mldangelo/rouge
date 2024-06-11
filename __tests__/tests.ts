@@ -1,15 +1,4 @@
-/**
- * @license
- * @Author: Lim Mingjie, Kenneth
- * @Date:   2016-01-21T12:04:28-05:00
- * @Email:  me@kenlimmj.com
- * @Last modified by:   Astrianna
- * @Last modified time: 2016-02-27T21:28:52-05:00
- */
-
-"use strict";
-
-const rouge = require("../dist/rouge");
+import * as rouge from "../lib/";
 
 describe("Utility Functions", () => {
   describe("fact", () => {
@@ -538,8 +527,8 @@ describe("Utility Functions", () => {
     const cands = ["a", "ab", "abc", "abcd"];
     const ref = "abcd";
 
-    const evalFunc = (a, b) => a.length + b.length;
-    const statTest = (input) => input.reduce((a, b) => a + b);
+    const evalFunc = (a: string, b: string): number => a.length + b.length;
+    const statTest = (input: number[]): number => input.reduce((a, b) => a + b);
 
     test("should throw RangeError when less than 2 candidates are provided", () => {
       expect(() => jk(["a"], ref, evalFunc)).toThrow(RangeError);
