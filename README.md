@@ -23,11 +23,11 @@ npm install --save rouge
 To use it, simply import or require the package:
 
 ```javascript
-import 'rouge'; // ES2015
+import "rouge"; // ES2015
 
 // OR
 
-const rouge = require('rouge'); // ES5
+const rouge = require("rouge"); // ES5
 ```
 
 To run the tests:
@@ -38,7 +38,7 @@ npm test
 
 This will display colorful output in your CLI. You'll need [Mocha](https://mochajs.org/) installed.
 
-*NOTE:* Function test coverage is 100%, but branch coverage numbers appear low due to additional code injected by [Babel](https://babeljs.io/) during transpilation from ES2015 to ES5. A fix is in progress, but contributions are welcome!
+_NOTE:_ Function test coverage is 100%, but branch coverage numbers appear low due to additional code injected by [Babel](https://babeljs.io/) during transpilation from ES2015 to ES5. A fix is in progress, but contributions are welcome!
 
 ## Usage
 
@@ -110,7 +110,7 @@ Before opening any issue, please search for existing issues and read the [Issue 
 
 ## Contributing
 
-Please submit all pull requests against *-wip branches. All code should pass JSHint/ESLint validation. Note that files in `lib` are written in ES2015 syntax and transpiled to corresponding files in `dist` using Babel. Gulp build pipelines exist and should be used.
+Please submit all pull requests against \*-wip branches. All code should pass JSHint/ESLint validation. Note that files in `lib` are written in ES2015 syntax and transpiled to corresponding files in `dist` using Babel. Gulp build pipelines exist and should be used.
 
 The amount of data available for writing tests is unfortunately inadequate. I've tried to be as thorough as possible, but errors may still exist. The gold standard is the DUC dataset, but it is form-walled and legal-release-walled, which is infuriating. If you have data in the form of a candidate summary, reference(s), and a verified ROUGE score you do not mind sharing, I would love to add it to the test harness.
 

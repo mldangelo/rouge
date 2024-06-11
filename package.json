@@ -4,8 +4,10 @@
   "description": "Recall-Oriented Understudy for Gisting Evaluation (ROUGE) Evaluation Functions",
   "main": "dist/rouge.js",
   "scripts": {
-    "test": "npx jest",
-    "build": "npx esbuild lib/rouge.ts --bundle --outdir=dist --format=esm --sourcemap --target=es6 --minify"
+    "build": "npx esbuild lib/rouge.ts --bundle --outdir=dist --format=esm --sourcemap --target=es6 --minify",
+    "format:check": "prettier --check .",
+    "format": "prettier --write .",
+    "test": "npx jest"
   },
   "repository": {
     "type": "git",
@@ -26,7 +28,8 @@
     "@swc/core": "^1.5.28",
     "@swc/jest": "^0.2.36",
     "esbuild": "^0.21.5",
-    "jest": "^29.7.0"
+    "jest": "^29.7.0",
+    "prettier": "^3.3.2"
   },
   "directories": {
     "lib": "lib",

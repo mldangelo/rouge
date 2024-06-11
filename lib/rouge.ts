@@ -1,14 +1,5 @@
-/**
-* @license
-* @Author: Lim Mingjie, Kenneth
-* @Date:   2016-01-20T18:56:14-05:00
-* @Email:  me@kenlimmj.com
-* @Last modified by:   Astrianna
-* @Last modified time: 2016-02-27T19:50:25-05:00
-*/
-
-import * as utils from './utils';
-export * from './utils';
+import * as utils from "./utils";
+export * from "./utils";
 
 interface NOpts {
   n: number;
@@ -53,17 +44,22 @@ interface LOpts {
 export function n(
   cand: string,
   ref: string,
-  opts: Partial<NOpts> = {}
+  opts: Partial<NOpts> = {},
 ): number {
-  if (cand.length === 0) throw new RangeError('Candidate cannot be an empty string');
-  if (ref.length === 0) throw new RangeError('Reference cannot be an empty string');
+  if (cand.length === 0)
+    throw new RangeError("Candidate cannot be an empty string");
+  if (ref.length === 0)
+    throw new RangeError("Reference cannot be an empty string");
 
   // Merge user-provided configuration with defaults
-  const options: NOpts = Object.assign({
-    n: 1,
-    nGram: utils.nGram,
-    tokenizer: utils.treeBankTokenize,
-  }, opts);
+  const options: NOpts = Object.assign(
+    {
+      n: 1,
+      nGram: utils.nGram,
+      tokenizer: utils.treeBankTokenize,
+    },
+    opts,
+  );
 
   const candGrams = options.nGram(options.tokenizer(cand), options.n);
   const refGrams = options.nGram(options.tokenizer(ref), options.n);
@@ -97,17 +93,22 @@ export function n(
 export function s(
   cand: string,
   ref: string,
-  opts: Partial<SOpts> = {}
+  opts: Partial<SOpts> = {},
 ): number {
-  if (cand.length === 0) throw new RangeError('Candidate cannot be an empty string');
-  if (ref.length === 0) throw new RangeError('Reference cannot be an empty string');
+  if (cand.length === 0)
+    throw new RangeError("Candidate cannot be an empty string");
+  if (ref.length === 0)
+    throw new RangeError("Reference cannot be an empty string");
 
   // Merge user-provided configuration with defaults
-  const options: SOpts = Object.assign({
-    beta: 0.5,
-    skipBigram: utils.skipBigram,
-    tokenizer: utils.treeBankTokenize,
-  }, opts);
+  const options: SOpts = Object.assign(
+    {
+      beta: 0.5,
+      skipBigram: utils.skipBigram,
+      tokenizer: utils.treeBankTokenize,
+    },
+    opts,
+  );
 
   const candGrams = options.skipBigram(options.tokenizer(cand));
   const refGrams = options.skipBigram(options.tokenizer(ref));
@@ -150,18 +151,23 @@ export function s(
 export function l(
   cand: string,
   ref: string,
-  opts: Partial<LOpts> = {}
+  opts: Partial<LOpts> = {},
 ): number {
-  if (cand.length === 0) throw new RangeError('Candidate cannot be an empty string');
-  if (ref.length === 0) throw new RangeError('Reference cannot be an empty string');
+  if (cand.length === 0)
+    throw new RangeError("Candidate cannot be an empty string");
+  if (ref.length === 0)
+    throw new RangeError("Reference cannot be an empty string");
 
   // Merge user-provided configuration with defaults
-  const options: LOpts = Object.assign({
-    beta: 0.5,
-    lcs: utils.lcs,
-    segmenter: utils.sentenceSegment,
-    tokenizer: utils.treeBankTokenize,
-  }, opts);
+  const options: LOpts = Object.assign(
+    {
+      beta: 0.5,
+      lcs: utils.lcs,
+      segmenter: utils.sentenceSegment,
+      tokenizer: utils.treeBankTokenize,
+    },
+    opts,
+  );
 
   const candSents = options.segmenter(cand);
   const refSents = options.segmenter(ref);
@@ -169,9 +175,11 @@ export function l(
   const candWords = options.tokenizer(cand);
   const refWords = options.tokenizer(ref);
 
-  const lcsAcc = refSents.map(r => {
+  const lcsAcc = refSents.map((r) => {
     const rTokens = options.tokenizer(r);
-    const lcsUnion = new Set(...candSents.map(c => options.lcs(options.tokenizer(c), rTokens)));
+    const lcsUnion = new Set(
+      ...candSents.map((c) => options.lcs(options.tokenizer(c), rTokens)),
+    );
 
     return lcsUnion.size;
   });
