@@ -37,13 +37,13 @@ export function treeBankTokenize(input: string): string[] {
   // 7. Wrap spaces around opening and closing brackets
   // 8. Wrap spaces around en and em-dashes
   let parse = input
-    .replace(/^\"/, " `` ")
-    .replace(/([ (\[{<])"/g, "$1 `` ")
+    .replace(/^"/, " `` ")
+    .replace(/([ ([{<])"/g, "$1 `` ")
     .replace(/\.\.\.*/g, " ... ")
     .replace(/[;@#$%&]/g, " $& ")
-    .replace(/([^\.])(\.)([\]\)}>"\']*)\s*$/g, "$1 $2$3 ")
+    .replace(/([^.])(\.)([\])}>"']*)\s*$/g, "$1 $2$3 ")
     .replace(/[,?!]/g, " $& ")
-    .replace(/[\]\[\(\)\{\}<>]/g, " $& ")
+    .replace(/[\][(){}<>]/g, " $& ")
     .replace(/---*/g, " -- ");
 
   // Wrap spaces at the start and end of the sentence for consistency
@@ -68,7 +68,7 @@ export function treeBankTokenize(input: string): string[] {
   }
 
   // Concatenate double spaces and remove start/end spaces
-  parse = parse.replace(/\ \ +/g, " ").replace(/^\ |\ $/g, "");
+  parse = parse.replace(/ +/g, " ").trim();
 
   // Split on spaces (original and inserted) to return the tokenized result
   return parse.split(" ");
@@ -101,9 +101,9 @@ export function sentenceSegment(input: string): string[] {
   );
 
   // Split sentences naively based on common terminals (.?!")
-  let chunks = input.split(/(\S.+?[.?!])(?=\s+|$|")/g);
+  const chunks = input.split(/(\S.+?[.?!])(?=\s+|$|")/g);
 
-  let acc = [];
+  const acc = [];
   for (let idx = 0; idx < chunks.length; idx++) {
     if (chunks[idx]) {
       // Trim only whitespace (i.e. preserve line breaks/carriage feeds)
@@ -219,23 +219,22 @@ export function charIsUpperCase(input: string): boolean {
  *                            A store should implement `has`, `get`, and `set` methods.
  * @return {Function}         A closure of the memoization cache and the original function
  */
-function memoize<T extends (...args: any[]) => any>(
+function memoize<T extends (...args: any[]) => any>( // eslint-disable-line @typescript-eslint/no-explicit-any
   func: T,
   Store: MapConstructor = Map,
 ): T {
-  return (() => {
-    const cache = new Store();
+  const cache = new Store<string, ReturnType<T>>();
 
-    return ((n: any) => {
-      if (cache.has(n)) {
-        return cache.get(n);
-      } else {
-        const result = func(n);
-        cache.set(n, result);
-        return result;
-      }
-    }) as T;
-  })();
+  return ((...args: Parameters<T>): ReturnType<T> => {
+    const key = JSON.stringify(args); // Serialize arguments to create a unique key
+    if (cache.has(key)) {
+      return cache.get(key) as ReturnType<T>;
+    } else {
+      const result = func(...args);
+      cache.set(key, result);
+      return result;
+    }
+  }) as T;
 }
 
 /**
@@ -310,7 +309,7 @@ export function nGram(
     const config = Object.assign({}, NGRAM_DEFAULT_OPTS, pad);
 
     // Clone the input token array to avoid mutating the source data
-    let tempTokens = tokens.slice(0);
+    const tempTokens = tokens.slice(0);
 
     if (config.start)
       for (let i = 0; i < n - 1; i++) tempTokens.unshift(config.val);
@@ -451,8 +450,8 @@ export function intersection(a: string[], b: string[]): string[] {
 export function lcs(a: string[], b: string[]): string[] {
   if (a.length === 0 || b.length === 0) return [];
 
-  let start: string[] = [];
-  let end: string[] = [];
+  const start: string[] = [];
+  const end: string[] = [];
 
   let startIdx = 0;
   let aEndIdx = a.length - 1;
