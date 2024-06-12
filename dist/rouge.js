@@ -1,3 +1,136 @@
-var m=[/\b(can)(not)\b/i,/\b(d)('ye)\b/i,/\b(gim)(me)\b/i,/\b(gon)(na)\b/i,/\b(got)(ta)\b/i,/\b(lem)(me)\b/i,/\b(more)('n)\b/i,/\b(wan)(na) /i,/ ('t)(is)\b/i,/ ('t)(was)\b/i],b=["jr","mr","mrs","ms","dr","prof","sr","sen","corp","rep","gov","atty","supt","det","rev","col","gen","lt","cmdr","adm","capt","sgt","cpl","maj","miss","misses","mister","sir","esq","mstr","phd","adj","adv","asst","bldg","brig","comdr","hon","messrs","mlle","mme","op","ord","pvt","reps","res","sens","sfc","surg"],I=["arc","al","exp","rd","st","dist","mt","fy","pd","pl","plz","tce","llb","md","bl","ma","ba","lit","ex","e.g","i.e","circa","ca","cca","v.s","etc","esp","ft","b.c","a.d"],A=["co","corp","yahoo","joomla","jeopardy","dept","univ","assn","bros","inc","ltd"],B=["ala","ariz","ark","cal","calif","col","colo","conn","del","fed","fla","fl","ga","ida","ind","ia","la","kan","kans","ken","ky","la","md","mich","minn","mont","neb","nebr","nev","okla","penna","penn","pa","dak","tenn","tex","ut","vt","va","wash","wis","wisc","wy","wyo","usafa","alta","ont","que","sask","yuk","ave","blvd","cl","ct","cres","hwy","U.S","U.S.A","E.U","N\xB0"],z=["a.m","p.m"],$=["jan","feb","mar","apr","jun","jul","aug","sep","oct","nov","dec","sept","sep"],d=["ex","e.g","i.e","circa","ca","cca","v.s","esp","ft","st","mt",...b],w=[...I,...$,...A,...B,...z,...b];function u(e){if(e.length===0)return[];let n=e.replace(/^"/," `` ").replace(/([ ([{<])"/g,"$1 `` ").replace(/\.\.\.*/g," ... ").replace(/[;@#$%&]/g," $& ").replace(/([^.])(\.)([\])}>"']*)\s*$/g,"$1 $2$3 ").replace(/[,?!]/g," $& ").replace(/[\][(){}<>]/g," $& ").replace(/---*/g," -- ");n=` ${n} `,n=n.replace(/"/g," '' ").replace(/([^'])' /g,"$1 ' ").replace(/'([sSmMdD]) /g," '$1 ").replace(/('ll|'LL|'re|'RE|'ve|'VE|n't|N'T) /g," $1 ");let s=-1;for(;s++<m.length;)n=n.replace(m[s]," $1 $2 ");return n=n.replace(/ +/g," ").trim(),n.split(" ")}function R(e){if(e.length===0)return[];let n=new RegExp("\\b("+w.join("|")+")[.!?] ?$","i"),s=new RegExp(/[ |.][A-Z].?$/,"i"),i=new RegExp(/[\r\n]+/,"g"),o=new RegExp(/\.\.\.*$/),a=new RegExp("\\b("+d.join("|")+")[.!?] ?$","i"),t=e.split(/(\S.+?[.?!])(?=\s+|$|")/g),c=[];for(let r=0;r<t.length;r++)if(t[r])if(t[r]=t[r].replace(/(^ +| +$)/g,""),i.test(t[r]))t[r+1]&&p(t[r])?t[r+1]=(t[r].trim()||"")+" "+(t[r+1]||"").replace(/ +/g," "):c.push(...t[r].trim().split(`
-`));else if(t[r+1]&&n.test(t[r])){let l=t[r+1];l.trim()&&p(l)&&!a.test(t[r])?(c.push(t[r]),t[r]=""):t[r+1]=(t[r]||"")+" "+(l||"").replace(/ +/g," ")}else if(t[r].length>1&&t[r+1]&&s.test(t[r])){let l=t[r].split(" "),g=l[l.length-1];g===g.toLowerCase()?t[r+1]=t[r+1]=(t[r]||"")+" "+(t[r+1]||"").replace(/ +/g," "):t[r+2]&&(p(l[l.length-2])&&p(t[r+2])?t[r+2]=(t[r]||"")+(t[r+1]||"").replace(/ +/g," ")+(t[r+2]||""):(c.push(t[r]),t[r]=""))}else t[r+1]&&o.test(t[r])?t[r+1]=(t[r]||"")+(t[r+1]||"").replace(/ +/g," "):t[r]&&t[r].length>0&&(c.push(t[r]),t[r]="");return c.length===0?[e]:c}function p(e){let n=e.trim().slice(0,1);return N(n)}function N(e){if(e.length!==1)throw new RangeError("Input should be a single character");let n=e.charCodeAt(0);return n>=65&&n<=90}function C(e,n=Map){let s=new n;return(...i)=>{let o=JSON.stringify(i);if(s.has(o))return s.get(o);{let a=e(...i);return s.set(o,a),a}}}function x(e,n=1){if(e<0)throw RangeError("Input must be a positive number");return e<2?n:x(e-1,e*n)}var L=C(x);function E(e){if(e.length<2)throw new RangeError("Input must have at least two words");let n=[];for(let s=0;s<e.length-1;s++)for(let i=s+1;i<e.length;i++)n.push(`${e[s]} ${e[i]}`);return n}var j={start:!1,end:!1,val:"<S>"};function k(e,n=2,s={}){if(n<1)throw new RangeError("ngram size cannot be smaller than 1");if(e.length<n)throw new RangeError("ngram size cannot be larger than the number of tokens available");if(Object.keys(s).length!==0){let o=Object.assign({},j,s),a=e.slice(0);if(o.start)for(let t=0;t<n-1;t++)a.unshift(o.val);if(o.end)for(let t=0;t<n-1;t++)a.push(o.val);e=a}let i=[];for(let o=0;o<e.length-n+1;o++)i.push(e.slice(o,o+n).join(" "));return i}function D(e){if(e<2)throw new RangeError("Input must be greater than 2");return .5*e*(e-1)}function G(e){if(e.length<1)throw new RangeError("Input array must have at least 1 element");return e.reduce((n,s)=>n+s)/e.length}function K(e,n,s,i=G){if(e.length<2)throw new RangeError("Candidate array must contain more than one element");let o=e.map(t=>s(t,n)),a=[];for(let t=0;t<o.length;t++){let c=o.slice(0);c.splice(t,1),a.push(Math.max(...c))}return i(a)}function h(e,n,s=.5){if(e<0||e>1)throw new RangeError("Precision value p must have bounds 0 \u2264 p \u2264 1");if(n<0||n>1)throw new RangeError("Recall value r must have bounds 0 \u2264 r \u2264 1");if(s<0)throw new RangeError("beta value must be greater than 0");return 0<=s&&s<=1?(1+s*s)*n*e/(n+s*s*e):n}function f(e,n){let s=new Set(e),i=new Set(n);return Array.from(s).filter(o=>i.has(o))}function T(e,n){if(e.length===0||n.length===0)return[];let s=[],i=[],o=0,a=e.length-1,t=n.length-1;for(;e[o]&&n[o]&&e[o]===n[o];)s.push(e[o]),o++;for(;e[a]&&n[t]&&e[a]===n[t];)i.push(e[a]),a--,t--;let c=e.slice(o,a+1),r=n.slice(o,t+1);for(let l=0;l<r.length;l++)for(let g=0;g<c.length;g++)r[l]===c[g]&&s.push(c[g]);return s.concat(i)}function W(e,n,s={}){if(e.length===0)throw new RangeError("Candidate cannot be an empty string");if(n.length===0)throw new RangeError("Reference cannot be an empty string");let i=Object.assign({n:1,nGram:k,tokenizer:u},s),o=i.nGram(i.tokenizer(e),i.n),a=i.nGram(i.tokenizer(n),i.n);return f(o,a).length/a.length}function q(e,n,s={}){if(e.length===0)throw new RangeError("Candidate cannot be an empty string");if(n.length===0)throw new RangeError("Reference cannot be an empty string");let i=Object.assign({beta:.5,skipBigram:E,tokenizer:u},s),o=i.skipBigram(i.tokenizer(e)),a=i.skipBigram(i.tokenizer(n)),t=f(o,a).length;if(t===0)return 0;{let c=t/a.length,r=t/o.length;return h(r,c,i.beta)}}function F(e,n,s={}){if(e.length===0)throw new RangeError("Candidate cannot be an empty string");if(n.length===0)throw new RangeError("Reference cannot be an empty string");let i=Object.assign({beta:.5,lcs:T,segmenter:R,tokenizer:u},s),o=i.segmenter(e),a=i.segmenter(n),t=i.tokenizer(e),c=i.tokenizer(n),r=a.map(S=>{let y=i.tokenizer(S);return new Set(...o.map(v=>i.lcs(i.tokenizer(v),y))).size}),l=0;for(;r.length;)l+=r.pop();let g=l/t.length,O=l/c.length;return h(O,g,i.beta)}export{j as NGRAM_DEFAULT_OPTS,G as arithmeticMean,N as charIsUpperCase,D as comb2,h as fMeasure,L as fact,f as intersection,K as jackKnife,F as l,T as lcs,W as n,k as nGram,q as s,R as sentenceSegment,E as skipBigram,p as strIsTitleCase,u as treeBankTokenize};
-//# sourceMappingURL=rouge.js.map
+import * as utils from "./utils";
+export * from "./utils";
+/**
+ * Computes the ROUGE-N score for a candidate summary.
+ *
+ * Configuration object schema and defaults:
+ * ```
+ * {
+ * 	n: 1                            // The size of the ngram used
+ * 	nGram: <inbuilt function>,      // The ngram generator function
+ * 	tokenizer: <inbuilt function>   // The string tokenizer
+ * }
+ * ```
+ *
+ * `nGram` has a type signature of ((Array<string>, number) => Array<string>)
+ * `tokenizer` has a type signature of ((string) => Array<string)
+ *
+ * @method n
+ * @param  {string}     cand        The candidate summary to be evaluated
+ * @param  {string}     ref         The reference summary to be evaluated against
+ * @param  {Object}     opts        Configuration options (see example)
+ * @return {number}                 The ROUGE-N score
+ */
+export function n(cand, ref, opts = {}) {
+    if (cand.length === 0)
+        throw new RangeError("Candidate cannot be an empty string");
+    if (ref.length === 0)
+        throw new RangeError("Reference cannot be an empty string");
+    // Merge user-provided configuration with defaults
+    const options = Object.assign({
+        n: 1,
+        nGram: utils.nGram,
+        tokenizer: utils.treeBankTokenize,
+    }, opts);
+    const candGrams = options.nGram(options.tokenizer(cand), options.n);
+    const refGrams = options.nGram(options.tokenizer(ref), options.n);
+    const match = utils.intersection(candGrams, refGrams);
+    return match.length / refGrams.length;
+}
+/**
+ * Computes the ROUGE-S score for a candidate summary.
+ *
+ * Configuration object schema and defaults:
+ * ```
+ * {
+ * 	beta: 1                             // The beta value used for the f-measure
+ * 	gapLength: 2                        // The skip window
+ * 	skipBigram: <inbuilt function>,     // The skip-bigram generator function
+ * 	tokenizer: <inbuilt function>       // The string tokenizer
+ * }
+ * ```
+ *
+ * `skipBigram` has a type signature of ((Array<string>, number) => Array<string>)
+ * `tokenizer` has a type signature of ((string) => Array<string)
+ *
+ * @method s
+ * @param  {string}     cand        The candidate summary to be evaluated
+ * @param  {string}     ref         The reference summary to be evaluated against
+ * @param  {Object}     opts        Configuration options (see example)
+ * @return {number}                 The ROUGE-S score
+ */
+export function s(cand, ref, opts = {}) {
+    if (cand.length === 0)
+        throw new RangeError("Candidate cannot be an empty string");
+    if (ref.length === 0)
+        throw new RangeError("Reference cannot be an empty string");
+    // Merge user-provided configuration with defaults
+    const options = Object.assign({
+        beta: 0.5,
+        skipBigram: utils.skipBigram,
+        tokenizer: utils.treeBankTokenize,
+    }, opts);
+    const candGrams = options.skipBigram(options.tokenizer(cand));
+    const refGrams = options.skipBigram(options.tokenizer(ref));
+    const skip2 = utils.intersection(candGrams, refGrams).length;
+    if (skip2 === 0) {
+        return 0;
+    }
+    else {
+        const skip2Recall = skip2 / refGrams.length;
+        const skip2Prec = skip2 / candGrams.length;
+        return utils.fMeasure(skip2Prec, skip2Recall, options.beta);
+    }
+}
+/**
+ * Computes the ROUGE-L score for a candidate summary
+ *
+ * Configuration object schema and defaults:
+ * ```
+ * {
+ * 	beta: 1                             // The beta value used for the f-measure
+ * 	lcs: <inbuilt function>             // The least common subsequence function
+ * 	segmenter: <inbuilt function>,      // The sentence segmenter
+ * 	tokenizer: <inbuilt function>       // The string tokenizer
+ * }
+ * ```
+ *
+ * `lcs` has a type signature of ((Array<string>, Array<string>) => Array<string>)
+ * `segmenter` has a type signature of ((string) => Array<string)
+ * `tokenizer` has a type signature of ((string) => Array<string)
+ *
+ * @method l
+ * @param  {string}     cand        The candidate summary to be evaluated
+ * @param  {string}     ref         The reference summary to be evaluated against
+ * @param  {Object}     opts        Configuration options (see example)
+ * @return {number}                 The ROUGE-L score
+ */
+export function l(cand, ref, opts = {}) {
+    if (cand.length === 0)
+        throw new RangeError("Candidate cannot be an empty string");
+    if (ref.length === 0)
+        throw new RangeError("Reference cannot be an empty string");
+    // Merge user-provided configuration with defaults
+    const options = Object.assign({
+        beta: 0.5,
+        lcs: utils.lcs,
+        segmenter: utils.sentenceSegment,
+        tokenizer: utils.treeBankTokenize,
+    }, opts);
+    const candSents = options.segmenter(cand);
+    const refSents = options.segmenter(ref);
+    const candWords = options.tokenizer(cand);
+    const refWords = options.tokenizer(ref);
+    const lcsAcc = refSents.map((r) => {
+        const rTokens = options.tokenizer(r);
+        const lcsUnion = new Set(...candSents.map((c) => options.lcs(options.tokenizer(c), rTokens)));
+        return lcsUnion.size;
+    });
+    // Sum the array as quickly as we can
+    let lcsSum = 0;
+    while (lcsAcc.length)
+        lcsSum += lcsAcc.pop();
+    const lcsRecall = lcsSum / candWords.length;
+    const lcsPrec = lcsSum / refWords.length;
+    return utils.fMeasure(lcsPrec, lcsRecall, options.beta);
+}

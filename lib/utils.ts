@@ -357,7 +357,7 @@ export function arithmeticMean(input: number[]): number {
  *
  * @method jackKnife
  * @param  {Array<string>}  cands      An array of candidate summaries to be evaluated
- * @param  {string}         ref        The reference summary to be evealuated against
+ * @param  {string}         ref        The reference summary to be evaluated against
  * @param  {Function}       func       The function used to evaluate a candidate against a reference.
  *                                     Should be of the type signature (string, string) => number
  * @param  {Function}       test       The function used to compute the test statistic.
@@ -394,7 +394,7 @@ export function jackKnife(
  * and recall score.
  *
  * DUC evaluation favors precision by setting beta to an
- * arbitary large number. To replicate this, set beta to
+ * arbitrary large number. To replicate this, set beta to
  * any value larger than 1.
  *
  * @method fMeasure
@@ -439,7 +439,7 @@ export function intersection(a: string[], b: string[]): string[] {
  * This function returns the elements from the two arrays
  * that form the LCS, in order of their appearance.
  *
- * For speed, the search-space is prunned by eliminating
+ * For speed, the search-space is pruned by eliminating
  * common entities at the start and end of both input arrays.
  *
  * @method lcs
