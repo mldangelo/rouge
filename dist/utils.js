@@ -195,7 +195,7 @@ export function charIsUpperCase(input) {
  *                            A store should implement `has`, `get`, and `set` methods.
  * @return {Function}         A closure of the memoization cache and the original function
  */
-function memoize(// eslint-disable-line @typescript-eslint/no-explicit-any
+function memoize( 
 func, Store = Map) {
     const cache = new Store();
     return ((...args) => {
