@@ -8,5 +8,5 @@ export default [
   ...tseslint.configs.recommended,
   {
     ignores: ["coverage/", "dist/", "node_modules/"],
-  }
+  },
 ];
